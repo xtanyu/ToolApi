@@ -1,7 +1,14 @@
 package com.xtyu.toolapi.utils;
 
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.enums.VideoType;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,5 +77,50 @@ public class UrlUtil {
             }
         }
         return mapRequest;
+    }
+
+
+    public static String getUrlInfo(String url,String id){
+        StringBuffer html = new StringBuffer();
+        InputStreamReader isr=null;
+        BufferedReader buf=null;
+        String str = null;
+        try {
+            URL urlObj = new URL(url+id);
+            URLConnection con = urlObj.openConnection();
+            isr = new InputStreamReader(con.getInputStream());
+            buf = new BufferedReader(isr);
+            while((str=buf.readLine()) != null){
+                html.append(str);
+            }
+        } catch (Exception e) {
+            throw new UrlParsingException("URL解密无水印视频异常");
+        }finally{
+            if(isr != null){
+                try {
+                    buf.close();
+                    isr.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return html.toString();
+    }
+
+
+    public static String getUrlId(String videoUrl, VideoType videoType){
+        String id = "";
+        try {
+            URL url = new URL(videoUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setInstanceFollowRedirects(false);
+            conn.connect();
+            String s = conn.getHeaderField("Location");
+            id = s.substring(s.indexOf(videoType.getCutStart())+videoType.getCutStart().length(),s.indexOf(videoType.getCutStop()));
+        }catch (IOException e) {
+            throw new UrlParsingException("URL解密ID异常");
+        }
+        return id;
     }
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.enums.VideoType;
 
 class PiPiXia {
     private String videoUrl;
@@ -17,51 +18,14 @@ class PiPiXia {
     private String videoOriginUrl;
     private String videoOriginTitle;
 
-
     public PiPiXia(String video_url) {
         this.videoUrl = video_url;
-        this.videoId = getID();
-        this.videoJson = getJson();
+        this.videoId = UrlUtil.getUrlId(video_url, VideoType.PI_PI_XIA);
+        this.videoJson = UrlUtil.getUrlInfo(VideoType.PI_PI_XIA.getParsingUrl(),videoId);
         this.videoOriginUrl = getOriginUrl();
         this.videoOriginTitle = getOriginTitle();
     }
 
-
-    private String getJson() {
-        String result = "";
-        try {
-            URL url = new URL("https://is.snssdk.com/bds/cell/detail/?cell_type=1&aid=1319&app_name=super&cell_id=" + this.videoId);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.connect();
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-        } catch (IOException e) {
-            throw new UrlParsingException("URL解密无水印视频异常");
-        }
-        return result;
-    }
-
-
-    private String getID() {
-        String id = "";
-        try {
-            URL url = new URL(this.videoUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setInstanceFollowRedirects(false);
-            conn.connect();
-            String s = conn.getHeaderField("Location");
-            id =s.substring(s.indexOf("item/") + 5, s.indexOf("?"));
-        } catch (IOException e) {
-            throw new UrlParsingException("URL解密ID异常");
-        }
-        return id;
-    }
-
-
-    // 无水印视频Url
     private String getOriginUrl(){
         try {
             JSONObject jsonObject = JSONObject.parseObject(this.videoJson);
@@ -74,8 +38,6 @@ class PiPiXia {
     }
 
 
-
-    // 无水印视频标题
     private String getOriginTitle() {
         try {
             JSONObject jsonObject = JSONObject.parseObject(this.videoJson);

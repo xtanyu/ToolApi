@@ -3,6 +3,7 @@ package com.xtyu.toolapi.utils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.enums.VideoType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,42 +28,10 @@ class DouYin {
 
     public DouYin(String videoUrl) {
         this.videoUrl = videoUrl;
-        this.videoId = getID();
-        this.videoJson = getJson();
+        this.videoId = UrlUtil.getUrlId(videoUrl, VideoType.DOU_YIN);
+        this.videoJson = UrlUtil.getUrlInfo(VideoType.DOU_YIN.getParsingUrl(),videoId);;
         this.videoOriginUrl = getOriginUrl();
         this.videoOriginTitle = getOriginTitle();
-    }
-
-    private String getJson(){
-        String result = "";
-        try {
-            URL apiUrl = new URL("https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids="+videoId);
-            HttpURLConnection connApi = (HttpURLConnection) apiUrl.openConnection();
-            connApi.connect();
-            BufferedReader br = new BufferedReader(new InputStreamReader(connApi.getInputStream(),"UTF-8"));
-            String line = "";
-            while ((line=br.readLine())!=null){
-                result += line;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    private String getID(){
-        String id = "";
-        try {
-            URL url = new URL(this.videoUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setInstanceFollowRedirects(false);
-            conn.connect();
-            String s = conn.getHeaderField("Location");
-            id = s.substring(s.indexOf("video/")+6,s.indexOf("/?"));
-        }catch (IOException e) {
-            throw new UrlParsingException("URL解密ID异常");
-        }
-        return id;
     }
 
     private String  getOriginUrl(){
