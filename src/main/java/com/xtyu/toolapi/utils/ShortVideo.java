@@ -9,13 +9,10 @@ public class ShortVideo {
 
     public static Map<String,String> getPPX(String url,boolean cell) {
         Map<String,String> map = new HashMap<>();
-        PiPiXia piPiXia = new PiPiXia(url,cell);
+        PiPiXia piPiXia = new PiPiXia(url);
         map.put("VideoID", piPiXia.getVideoId());
         map.put("OriginTitle", piPiXia.getVideoOriginTitle());
         map.put("OriginUrl", piPiXia.getVideoOriginUrl());
-        map.put("AuthorID", piPiXia.getVideoAuthorId());
-        map.put("AuthorName", piPiXia.getVideoAuthorName());
-        map.put("AuthorImage", piPiXia.getVideoAuthorImage());
         return map;
     }
 

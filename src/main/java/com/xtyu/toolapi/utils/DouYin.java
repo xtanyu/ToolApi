@@ -60,7 +60,7 @@ class DouYin {
             String s = conn.getHeaderField("Location");
             id = s.substring(s.indexOf("video/")+6,s.indexOf("/?"));
         }catch (IOException e) {
-            throw new UrlParsingException("url解密异常");
+            throw new UrlParsingException("URL解密ID异常");
         }
         return id;
     }
@@ -81,7 +81,7 @@ class DouYin {
             conn.connect();
             s = conn.getHeaderField("Location");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UrlParsingException("URL解密无水印视频异常");
         }
         return s;
     }

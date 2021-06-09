@@ -27,7 +27,6 @@ public class ControllerException {
     @ExceptionHandler(UrlParsingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<?> UrlParsingException(UrlParsingException e) {
-        System.out.println("进入全局异常");
         BaseResponse<?> baseResponse = handleBaseException(e);
         HttpStatus status = HttpStatus.BAD_REQUEST;
         baseResponse.setStatus(status.value());
