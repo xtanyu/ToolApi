@@ -1,26 +1,22 @@
-package com.xtyu.toolapi.utils;
+package com.xtyu.toolapi.utils.video;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Date;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONArray;
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.dto.RedirectUrlDto;
 import com.xtyu.toolapi.model.enums.VideoType;
+import com.xtyu.toolapi.utils.UrlUtil;
 
 class PiPiXia {
-    private String videoUrl;
     private String videoId;
     private String videoJson;
     private String videoOriginUrl;
     private String videoOriginTitle;
 
     public PiPiXia(String video_url) {
-        this.videoUrl = video_url;
-        this.videoId = UrlUtil.getUrlId(video_url, VideoType.PI_PI_XIA);
+        RedirectUrlDto redirectUrlDto= UrlUtil.getRedirectUrl(video_url, VideoType.PI_PI_XIA);
+        this.videoId = redirectUrlDto.getId();
         this.videoJson = UrlUtil.getUrlInfo(VideoType.PI_PI_XIA.getParsingUrl(),videoId);
         this.videoOriginUrl = getOriginUrl();
         this.videoOriginTitle = getOriginTitle();

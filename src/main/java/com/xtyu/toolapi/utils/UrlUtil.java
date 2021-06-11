@@ -1,6 +1,7 @@
 package com.xtyu.toolapi.utils;
 
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.dto.RedirectUrlDto;
 import com.xtyu.toolapi.model.enums.VideoType;
 
 import java.io.BufferedReader;
@@ -79,7 +80,12 @@ public class UrlUtil {
         return mapRequest;
     }
 
-
+    /**
+     * 解析出无水印视频相关信息
+     * @param url  解析url
+     * @param id   视频对应id
+     * @return
+     */
     public static String getUrlInfo(String url,String id){
         StringBuffer html = new StringBuffer();
         InputStreamReader isr=null;
@@ -108,19 +114,21 @@ public class UrlUtil {
         return html.toString();
     }
 
-
-    public static String getUrlId(String videoUrl, VideoType videoType){
-        String id = "";
+    public static RedirectUrlDto getRedirectUrl(String videoUrl, VideoType videoType){
+        RedirectUrlDto redirectUrlDto;
         try {
             URL url = new URL(videoUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setInstanceFollowRedirects(false);
             conn.connect();
             String s = conn.getHeaderField("Location");
-            id = s.substring(s.indexOf(videoType.getCutStart())+videoType.getCutStart().length(),s.indexOf(videoType.getCutStop()));
+            redirectUrlDto=new RedirectUrlDto();
+            if (videoType!=null)
+            redirectUrlDto.setId(s.substring(s.indexOf(videoType.getCutStart())+videoType.getCutStart().length(),s.indexOf(videoType.getCutStop())));
+            redirectUrlDto.setRedirectUrl(s);
         }catch (IOException e) {
             throw new UrlParsingException("URL解密ID异常");
         }
-        return id;
+        return redirectUrlDto;
     }
 }

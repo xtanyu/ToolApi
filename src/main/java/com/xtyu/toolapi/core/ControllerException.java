@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -24,13 +25,22 @@ import java.io.StringWriter;
 @Slf4j
 public class ControllerException {
 
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public BaseResponse<?> handlerNoFoundException(NoHandlerFoundException e) {
+        BaseResponse<?> baseResponse = handleBaseException(e);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        baseResponse.setStatus(status.value());
+        baseResponse.setMessage(e.getMessage());
+        return baseResponse;
+    }
+
     @ExceptionHandler(UrlParsingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<?> UrlParsingException(UrlParsingException e) {
         BaseResponse<?> baseResponse = handleBaseException(e);
         HttpStatus status = HttpStatus.BAD_REQUEST;
         baseResponse.setStatus(status.value());
-        baseResponse.setMessage(e.getMessage());
+        baseResponse.setMessage(e.getMessage()+",请重试");
         return baseResponse;
     }
 

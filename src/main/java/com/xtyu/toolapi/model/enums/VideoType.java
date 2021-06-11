@@ -3,7 +3,8 @@ package com.xtyu.toolapi.model.enums;
 public enum VideoType {
 
     DOU_YIN("video/", "/?", "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids="),
-    PI_PI_XIA("item/", "?", "https://is.snssdk.com/bds/cell/detail/?cell_type=1&aid=1319&app_name=super&cell_id=");
+    PI_PI_XIA("item/", "?", "https://is.snssdk.com/bds/cell/detail/?cell_type=1&aid=1319&app_name=super&cell_id="),
+    PHP_PARSING_SERVICE(null,null,"https://video.xtyu.top/?url=");
     private final String cutStart;
     private final String cutStop;
     private final String parsingUrl;
