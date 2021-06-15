@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:/Users/smile/Desktop/ToolApi/db/tool_api
+    username: root
+    password: 8765551730
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+server:
+  port: 8080
+wx:
+  appId:
+  secret: 

@@ -1,6 +1,7 @@
 package com.xtyu.toolapi.core;
 
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.model.support.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.ExceptionUtils;
@@ -34,12 +35,18 @@ public class ControllerException {
         return baseResponse;
     }
 
+    @ExceptionHandler(WxInfoException.class)
+    public BaseResponse<?> WxInfoException(WxInfoException e) {
+        BaseResponse<?> baseResponse = handleBaseException(e);
+        baseResponse.setStatus(e.getStatus());
+        baseResponse.setMessage(e.getMessage());
+        return baseResponse;
+    }
+
     @ExceptionHandler(UrlParsingException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseResponse<?> UrlParsingException(UrlParsingException e) {
         BaseResponse<?> baseResponse = handleBaseException(e);
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        baseResponse.setStatus(status.value());
+        baseResponse.setStatus(e.getStatus());
         baseResponse.setMessage(e.getMessage()+",请重试");
         return baseResponse;
     }

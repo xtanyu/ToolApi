@@ -9,8 +9,8 @@ import org.springframework.lang.Nullable;
  * @author: smile
  * @date: 2021/6/9 13:47
  * @description:iphone 17521111022
+ * 视频地址解析时异常
  */
-@Log4j2
 public class UrlParsingException extends RuntimeException {
 
     public UrlParsingException(String message) {
@@ -22,6 +22,6 @@ public class UrlParsingException extends RuntimeException {
     }
 
     public Integer getStatus() {
-        return HttpStatus.BAD_REQUEST.value();
+        return 1000;
     }
 }
