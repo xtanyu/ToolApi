@@ -15,5 +15,7 @@ public class WxUser {
     private String name;
     private Integer videoNumber;
     private String openId;
+    private Integer signInSum;//累计签到次数
+    private Date endSignInTime;//最后签到时间
     private Date createTime;
 }

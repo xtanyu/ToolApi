@@ -13,4 +13,11 @@ public interface WxUserService {
     int insert(WxUser wxUser);
 
     int updateById(WxUser wxUser);
+
+    /**
+     * 签到
+     * @param openId
+     * @return 累计签到次数
+     */
+    WxUser singIn(String openId);
 }
