@@ -14,9 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/15 13:38
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @Service
 public class WxUserServiceImpl implements WxUserService {

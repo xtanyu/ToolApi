@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.Date;
 
 class DouYin {
-    private String videoJson;
+    private  String videoJson;
     private String videoId;
     private String videoOriginUrl;
     private String videoOriginTitle;
@@ -45,7 +45,6 @@ class DouYin {
         }
         return s;
     }
-
     private String getOriginTitle() {
         try {
             JSONObject jsonObject = JSONObject.parseObject(this.videoJson);

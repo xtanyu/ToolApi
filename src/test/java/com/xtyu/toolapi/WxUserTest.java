@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/15 09:55
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @SpringBootTest
 public class WxUserTest {
@@ -26,6 +26,5 @@ public class WxUserTest {
         wxUser.setVideoNumber(12);
         wxUserMapper.insert(wxUser);
         System.out.println(wxUserMapper.selectList(null));
-
     }
 }

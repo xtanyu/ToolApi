@@ -13,3 +13,6 @@ server:
 wx:
   appId: wx53df3e44b7ec396d
   secret: 93546c0ea60846721a6e6ff86f28b86b
+logging:
+  file:
+    name: toolApi.log

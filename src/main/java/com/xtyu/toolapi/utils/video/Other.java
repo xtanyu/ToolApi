@@ -9,9 +9,9 @@ import com.xtyu.toolapi.utils.UrlUtil;
 import lombok.Data;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/11 11:51
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @Data
 class Other {

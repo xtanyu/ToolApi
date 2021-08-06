@@ -11,17 +11,14 @@ import com.xtyu.toolapi.utils.video.ShortVideo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/9
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @RestController
 @RequestMapping("/api/video")
@@ -47,13 +44,15 @@ public class VideoController {
             throw new WxInfoException("解析次数已用完");
         }
         Map<String, String> urlInfoMap;
-        if (url.contains("douyin")) {
-            urlInfoMap = ShortVideo.getDY(url);
-        } else if (url.contains("pipix")) {
-            urlInfoMap = ShortVideo.getPPX(url);
-        } else {
-            urlInfoMap = ShortVideo.getOther(url);
-        }
+        //todo 先都用php
+//        if (url.contains("douyin")) {
+//            urlInfoMap = ShortVideo.getDY(url);
+//        } else if (url.contains("pipix")) {
+//            urlInfoMap = ShortVideo.getPPX(url);
+//        } else {
+//            urlInfoMap = ShortVideo.getOther(url);
+//        }
+        urlInfoMap = ShortVideo.getOther(url);
         wxUser.setVideoNumber(wxUser.getVideoNumber() - 1);
         wxUserService.updateById(wxUser);
         ParsingInfo parsingInfo=new ParsingInfo();
@@ -76,13 +75,5 @@ public class VideoController {
         queryWrapper.eq("user_open_id",openId);
         List<ParsingInfo> parsingInfoList=parsingInfoMapper.selectList(queryWrapper);
         return BaseResponse.ok(parsingInfoList);
-
-    }
-
-    public static void main(String[] args) {
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-        System.out.println("当前日期=" + date);
-        System.out.println("当前时间=" + time);
     }
 }

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/15 11:05
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @Component
 public class WxConfig {

@@ -18,11 +18,11 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/9 10:48
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
-@RestControllerAdvice(value = {"com.xtyu.toolapi.controller"})
+@RestControllerAdvice
 @Slf4j
 public class ControllerException {
 

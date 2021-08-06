@@ -1,11 +1,9 @@
 package com.xtyu.toolapi.exception;
 
-import org.springframework.http.HttpStatus;
-
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/15 14:19
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  * 微信相关异常
  */
 public class WxInfoException extends RuntimeException{

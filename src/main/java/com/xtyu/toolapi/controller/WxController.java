@@ -11,13 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * @author: smile
+ * @author: 小熊
  * @date: 2021/6/11 16:58
- * @description:iphone 17521111022
+ * @description:phone 17521111022
  */
 @RestController
 @RequestMapping("/api/wx")
