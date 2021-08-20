@@ -1,6 +1,7 @@
 package com.xtyu.toolapi.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xtyu.toolapi.exception.Asserts;
 import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.mapper.WxUserMapper;
 import com.xtyu.toolapi.model.entity.WxUser;
@@ -48,7 +49,7 @@ public class WxUserServiceImpl implements WxUserService {
     public WxUser singIn(String openId) {
         WxUser wxUser = getUserInfoByOpenId(openId);
         if (wxUser==null)
-            throw new WxInfoException("获取用户信息失败");
+            Asserts.wxInfoFail("获取用户信息失败");
         Date signTime = wxUser.getEndSignInTime();//最后签到时间
         Date nowDate = new Date();
         Date startDate = DateUtil.getStartTime(nowDate);//今日开始时间
@@ -59,7 +60,7 @@ public class WxUserServiceImpl implements WxUserService {
             wxUser.setEndSignInTime(nowDate);
             wxUserMapper.updateById(wxUser);
         }else {
-            throw new WxInfoException("重复签到");
+            Asserts.wxInfoFail("重复签到");
         }
         return wxUser;
     }

@@ -43,7 +43,7 @@ public class WxController {
             wxUser = new WxUser();
             wxUser.setName(name);
             wxUser.setOpenId(openId);
-            wxUser.setVideoNumber(10);
+            wxUser.setVideoNumber(999);
             wxUser.setSignInSum(1);
             wxUser.setCreateTime(new Date());
             wxUserService.insert(wxUser);

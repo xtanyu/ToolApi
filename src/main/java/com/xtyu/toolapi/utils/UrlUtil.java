@@ -3,6 +3,7 @@ package com.xtyu.toolapi.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xtyu.toolapi.config.WxConfig;
+import com.xtyu.toolapi.exception.Asserts;
 import com.xtyu.toolapi.exception.UrlParsingException;
 import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.model.dto.RedirectUrlDto;
@@ -167,7 +168,7 @@ public class UrlUtil {
             JSONObject jsonObject = JSON.parseObject(info.toString());
             openId = jsonObject.get("openid").toString();
         } catch (Exception e) {
-          throw new WxInfoException("微信openId解析失败"+JSONObject.toJSON(info));
+            Asserts.wxInfoFail("微信openId解析失败" + JSONObject.toJSON(info));
         }
         return openId;
     }
