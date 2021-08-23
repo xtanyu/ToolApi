@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xtyu.toolapi.exception.Asserts;
 import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.mapper.ParsingInfoMapper;
+import com.xtyu.toolapi.model.dto.PhpParsingDto;
 import com.xtyu.toolapi.model.entity.ParsingInfo;
 import com.xtyu.toolapi.model.entity.WxUser;
 import com.xtyu.toolapi.model.support.BaseResponse;
@@ -39,14 +40,14 @@ public class VideoController {
      * @return
      */
     @PostMapping(value = "getVideoInfo")
-    public BaseResponse<Map> getVideoInfo(@RequestParam(value = "url") String url, @RequestParam(value = "openId") String openId) {
+    public BaseResponse getVideoInfo(@RequestParam(value = "url") String url, @RequestParam(value = "openId") String openId) {
         WxUser wxUser = wxUserService.getUserInfoByOpenId(openId);
         if (wxUser == null) {
             Asserts.wxInfoFail("未查到用户信息");
         } else if (wxUser.getVideoNumber() < 1) {
             Asserts.wxInfoFail("解析次数已用完");
         }
-        Map<String, String> urlInfoMap;
+        PhpParsingDto urlInfo;
         /*if (url.contains("douyin")) { //todo 先都用php
             urlInfoMap = ShortVideo.getDY(url);
         } else if (url.contains("pipix")) {
@@ -54,16 +55,19 @@ public class VideoController {
         } else {
             urlInfoMap = ShortVideo.getOther(url);
         }*/
-        urlInfoMap = ShortVideo.getOther(url);
+        urlInfo = ShortVideo.getOther(url);
         wxUser.setVideoNumber(wxUser.getVideoNumber() - 1);
+        wxUser.setLastParsingTime(new Date());
         wxUserService.updateById(wxUser);
         ParsingInfo parsingInfo = new ParsingInfo();
-        parsingInfo.setTitle(urlInfoMap.get("OriginTitle"));
-        parsingInfo.setDownloadUrl(urlInfoMap.get("OriginUrl"));
+        parsingInfo.setTitle(urlInfo.getTitle());
+        parsingInfo.setDownloadUrl(urlInfo.getUrl());
+        parsingInfo.setAuthor(urlInfo.getAuthor());
+        parsingInfo.setCover(urlInfo.getCover());
         parsingInfo.setUserOpenId(wxUser.getOpenId());
         parsingInfo.setCreateTime(new Date());
         parsingInfoMapper.insert(parsingInfo);
-        return BaseResponse.ok(urlInfoMap);
+        return BaseResponse.ok(urlInfo);
     }
 
     /***
@@ -80,5 +84,4 @@ public class VideoController {
         List<ParsingInfo> parsingInfoList = parsingInfoMapper.selectList(queryWrapper);
         return BaseResponse.ok(parsingInfoList);
     }
-
 }

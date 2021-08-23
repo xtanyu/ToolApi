@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.xtyu.toolapi.config.WxConfig;
 import com.xtyu.toolapi.exception.Asserts;
 import com.xtyu.toolapi.exception.UrlParsingException;
-import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.model.dto.RedirectUrlDto;
 import com.xtyu.toolapi.model.enums.VideoType;
 
@@ -13,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -168,7 +166,7 @@ public class UrlUtil {
             JSONObject jsonObject = JSON.parseObject(info.toString());
             openId = jsonObject.get("openid").toString();
         } catch (Exception e) {
-            Asserts.wxInfoFail("微信openId解析失败" + JSONObject.toJSON(info));
+            Asserts.wxInfoFail("微信openId解析失败" + info);
         }
         return openId;
     }

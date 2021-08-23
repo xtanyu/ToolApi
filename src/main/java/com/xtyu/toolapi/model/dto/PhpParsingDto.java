@@ -9,10 +9,10 @@ import lombok.Data;
  */
 @Data
 public class PhpParsingDto {
-    private String author;
-    private String avatar;
+    private String author;//视频作者
+    private String avatar;//作者头像
     private String time;
     private String title;
-    private String cover;
-    private String url;
+    private String cover;//视频封面
+    private String url;//视频无水印链接
 }

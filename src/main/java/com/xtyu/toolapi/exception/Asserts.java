@@ -7,6 +7,6 @@ package com.xtyu.toolapi.exception;
  */
 public class Asserts {
     public static void wxInfoFail(String message) {
-        Asserts.wxInfoFail(message);
+        throw new WxInfoException(message);
     }
 }

@@ -16,15 +16,11 @@ import lombok.Data;
 @Data
 class Other {
     private PhpParsingDto parsingDto;
-    private String videoOriginUrl;
-    private String videoOriginTitle;
 
     public Other(String videoUrl){
         String info = UrlUtil.getUrlInfo(VideoType.PHP_PARSING_SERVICE.getParsingUrl(), videoUrl);
-        PhpParsingDto phpParsingDto = JSONArray.parseObject(info).getObject("data",PhpParsingDto.class);
-        if (phpParsingDto==null)
+        parsingDto = JSONArray.parseObject(info).getObject("data",PhpParsingDto.class);
+        if (parsingDto==null)
             throw new UrlParsingException("视频服务解析异常");
-        this.videoOriginUrl=phpParsingDto.getUrl();
-        this.videoOriginTitle=phpParsingDto.getTitle();
     }
 }

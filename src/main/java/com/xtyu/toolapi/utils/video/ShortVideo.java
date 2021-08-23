@@ -1,6 +1,7 @@
 package com.xtyu.toolapi.utils.video;
 
 import com.xtyu.toolapi.exception.UrlParsingException;
+import com.xtyu.toolapi.model.dto.PhpParsingDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +26,10 @@ public class ShortVideo {
         return map;
     }
 
-    public static Map<String, String> getOther(String url) {
+    public static PhpParsingDto getOther(String url) {
         if (!isContainsStrings(url))
             throw new UrlParsingException("链接格式错误");
-        Map<String, String> otherMap = new HashMap<>();
-        Other other = new Other(url);
-        otherMap.put("OriginTitle", other.getVideoOriginTitle());
-        otherMap.put("OriginUrl", other.getVideoOriginUrl());
-        return otherMap;
+        return new Other(url).getParsingDto();
     }
 
     static boolean isContainsStrings(String url) {
