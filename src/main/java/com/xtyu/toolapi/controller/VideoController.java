@@ -1,8 +1,6 @@
 package com.xtyu.toolapi.controller;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xtyu.toolapi.exception.Asserts;
-import com.xtyu.toolapi.exception.WxInfoException;
 import com.xtyu.toolapi.mapper.ParsingInfoMapper;
 import com.xtyu.toolapi.model.dto.PhpParsingDto;
 import com.xtyu.toolapi.model.entity.ParsingInfo;
@@ -13,11 +11,9 @@ import com.xtyu.toolapi.utils.video.ShortVideo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author: 小熊
@@ -34,7 +30,7 @@ public class VideoController {
     ParsingInfoMapper parsingInfoMapper;
 
     /***
-     * 视频无水印链接解析
+     * 视频无水印链接解析 版本1使用php服务解析视频
      * @param url 分享地址
      * @param openId 用户openId
      * @return
@@ -48,13 +44,6 @@ public class VideoController {
             Asserts.wxInfoFail("解析次数已用完");
         }
         PhpParsingDto urlInfo;
-        /*if (url.contains("douyin")) { //todo 先都用php
-            urlInfoMap = ShortVideo.getDY(url);
-        } else if (url.contains("pipix")) {
-            urlInfoMap = ShortVideo.getPPX(url);
-        } else {
-            urlInfoMap = ShortVideo.getOther(url);
-        }*/
         urlInfo = ShortVideo.getOther(url);
         wxUser.setVideoNumber(wxUser.getVideoNumber() - 1);
         wxUser.setLastParsingTime(new Date());
@@ -68,6 +57,17 @@ public class VideoController {
         parsingInfo.setCreateTime(new Date());
         parsingInfoMapper.insert(parsingInfo);
         return BaseResponse.ok(urlInfo);
+    }
+
+    /***
+     * 视频无水印链接解析 版本2使用Java解析
+     * @param url 分享地址
+     * @param openId 用户openId
+     * @return
+     */
+    @PostMapping(value = "getVideoInfo/v2")
+    public BaseResponse getVideoInfo2(@RequestParam(value = "url") String url, @RequestParam(value = "openId") String openId) {
+        return BaseResponse.ok("urlInfo");
     }
 
     /***

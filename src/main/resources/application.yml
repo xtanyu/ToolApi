@@ -8,11 +8,17 @@ spring:
     console:
       path: /h2-console
       enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 server:
-  port: 8080
+  port: 10521
 wx:
   appId: wx53df3e44b7ec396d
   secret: 93546c0ea60846721a6e6ff86f28b86b
 logging:
   file:
     name: toolApi.log
+
+

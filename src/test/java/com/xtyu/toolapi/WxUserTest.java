@@ -19,12 +19,6 @@ public class WxUserTest {
     private WxUserMapper wxUserMapper;
     @Test
     public void testH2(){
-        WxUser wxUser=new WxUser();
-        wxUser.setName("测试小黑");
-        wxUser.setCreateTime(new Date());
-        wxUser.setOpenId("123123132132132132");
-        wxUser.setVideoNumber(12);
-        wxUserMapper.insert(wxUser);
-        System.out.println(wxUserMapper.selectList(null));
+
     }
 }

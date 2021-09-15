@@ -16,6 +16,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.rmi.UnexpectedException;
 
 /**
  * @author: 小熊
@@ -25,6 +26,15 @@ import java.io.StringWriter;
 @RestControllerAdvice
 @Slf4j
 public class ControllerException {
+
+    @ExceptionHandler(UnexpectedException.class)
+    public BaseResponse<?> UnexpectedException(UnexpectedException e) {
+        BaseResponse<?> baseResponse = handleBaseException(e);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        baseResponse.setStatus(status.value());
+        baseResponse.setMessage(e.getMessage());
+        return baseResponse;
+    }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public BaseResponse<?> handlerNoFoundException(NoHandlerFoundException e) {

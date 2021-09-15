@@ -19,7 +19,7 @@ import java.util.List;
  * @date: 2021/6/15 13:38
  * @description:phone 17521111022
  */
-@Service
+@Service("wxUserService")
 public class WxUserServiceImpl implements WxUserService {
 
     @Resource
