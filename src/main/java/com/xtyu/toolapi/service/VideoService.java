@@ -2,7 +2,6 @@ package com.xtyu.toolapi.service;
 
 import com.xtyu.toolapi.model.dto.VideoInfoDto;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -29,4 +28,11 @@ public interface VideoService {
      * @return
      */
     VideoInfoDto parsingKsuVideoInfo(String url,HttpHeaders httpHeaders) throws IOException;
+
+    /**
+     * PHP服务解析（暂用）
+     * @param url 分享链接
+     * @return
+     */
+    VideoInfoDto phpParsingVideoInfo(String url);
 }

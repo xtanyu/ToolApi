@@ -3,7 +3,6 @@ package com.xtyu.toolapi.controller;
 import com.xtyu.toolapi.model.entity.WxUser;
 import com.xtyu.toolapi.model.support.BaseResponse;
 import com.xtyu.toolapi.service.WxUserService;
-import com.xtyu.toolapi.utils.UrlUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,13 +25,12 @@ public class WxController {
 
     @PostMapping(value = "auth")
     public BaseResponse<String> wxAuth(@RequestParam(value = "js_code") String code) {
-        String openId = UrlUtil.getOpenId(code);
-        return BaseResponse.ok("openId获取成功",openId);
+        String openId = wxUserService.getOpenId(code);
+        return BaseResponse.ok("openId获取成功", openId);
     }
 
     /**
      * 登录、注册、获取用户信息
-     *
      * @param openId
      * @return
      */

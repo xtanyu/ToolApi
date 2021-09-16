@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xtyu.toolapi.exception.Asserts;
+import com.xtyu.toolapi.mapper.ParsingInfoMapper;
 import com.xtyu.toolapi.model.dto.VideoInfoDto;
+import com.xtyu.toolapi.model.entity.ParsingInfo;
 import com.xtyu.toolapi.model.entity.WxUser;
 import com.xtyu.toolapi.service.VideoService;
 import com.xtyu.toolapi.service.WxUserService;
@@ -14,11 +16,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,26 +39,42 @@ public class VideoServiceImpl implements VideoService {
     @Resource
     private RestTemplateUtil restTemplateUtil;
 
+    @Resource
+    private ParsingInfoMapper parsingInfoMapper;
+
     @Override
     public VideoInfoDto getVideoInfo(String openid, String url) {
+        WxUser wxUser = wxUserService.getUserInfoByOpenId(openid);
+        if (wxUser == null) {
+            Asserts.wxInfoFail("未查到用户信息");
+        } else if (wxUser.getVideoNumber() < 1) {
+            Asserts.wxInfoFail("解析次数已用完");
+        }
         isContainsStrings(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set("User-Agent", "Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Mobile Safari/537.36");
         httpHeaders.set("Referer", url);
-//        WxUser wxUser = wxUserService.getUserInfoByOpenId(openid);
-//        if (wxUser == null) {
-//            Asserts.wxInfoFail("未查到用户信息");
-//        } else if (wxUser.getVideoNumber() < 1) {
-//            Asserts.wxInfoFail("解析次数已用完");
-//        }
-//        if (url.contains("douyin")) {
-//
-//        } else if (url.contains("pipix")) {
-//            urlInfoMap = ShortVideo.getPPX(url);
-//        } else {
-//            urlInfoMap = ShortVideo.getOther(url);
-//        }
-        return parsingDyVideoInfo("https://v.douyin.com/dR9Ew7U/", httpHeaders);
+        VideoInfoDto videoInfoDto;
+        //抖音快手Java解析其余短视频平台Java版本暂时没时间写先用php
+        if (url.contains("douyin")) {
+            videoInfoDto = parsingDyVideoInfo(url, httpHeaders);
+        } else if (url.contains("kuaishou")) {
+            videoInfoDto = parsingKsuVideoInfo(url, httpHeaders);
+        } else {
+            videoInfoDto = phpParsingVideoInfo(url);
+        }
+        wxUser.setVideoNumber(wxUser.getVideoNumber() - 1);
+        wxUser.setLastParsingTime(new Date());
+        wxUserService.updateById(wxUser);
+        ParsingInfo parsingInfo = new ParsingInfo();
+        parsingInfo.setTitle(videoInfoDto.getTitle());
+        parsingInfo.setDownloadUrl(videoInfoDto.getUrl());
+        parsingInfo.setAuthor(videoInfoDto.getAuthor());
+        parsingInfo.setCover(videoInfoDto.getCover());
+        parsingInfo.setUserOpenId(wxUser.getOpenId());
+        parsingInfo.setCreateTime(new Date());
+        parsingInfoMapper.insert(parsingInfo);
+        return videoInfoDto;
     }
 
     @Override
@@ -114,9 +131,22 @@ public class VideoServiceImpl implements VideoService {
         return videoInfoDto;
     }
 
+    @Override
+    public VideoInfoDto phpParsingVideoInfo(String url) {
+        url = "https://video.xtyu.top/?url=" + url;
+        String htmlContent = restTemplateUtil.getForObject(url, null, String.class);
+        Asserts.urlInfoNotNull(htmlContent, "视频解析异常");
+        VideoInfoDto videoInfoDto = JSONArray.parseObject(htmlContent).getObject("data", VideoInfoDto.class);
+        Asserts.urlInfoNotNull(videoInfoDto, "视频解析异常");
+        return videoInfoDto;
+    }
+
 
     void isContainsStrings(String url) {
-        String[] strings = new String[]{"douyin", "kuaishou"};
+        String[] strings = new String[]{"pipix", "douyin", "huoshan", "h5.weishi", "isee.weishi", "weibo.com", "oasis.weibo", "zuiyou",
+                "bbq.bilibili", "kuaishou", "quanmin", "moviebase", "hanyuhl", "eyepetizer", "immomo", "vuevideo",
+                "xiaokaxiu", "ippzone", "qq.com", "ixigua.com"
+        };
         for (String s : strings) {
             if (url.contains(s)) {
                 return;
