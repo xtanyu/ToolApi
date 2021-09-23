@@ -24,8 +24,3 @@ CREATE TABLE parsing_info
     create_time  datetime NULL DEFAULT NULL COMMENT '创建时间',
     PRIMARY KEY (id)
 );
-
-
-alter table parsing_info add author varchar(200)
-alter table parsing_info add cover varchar(1000)
-alter table wx_user add last_parsing_time datetime

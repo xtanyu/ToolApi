@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:/Users/smile/Desktop/ToolApi/db/tool_api
+    url: jdbc:h2:file:/Users/smile/Desktop/ToolApi/db/tool_api_test
     username: root
-    password: 8765551730
+    password: 123456
   h2:
     console:
       path: /h2-console
@@ -15,8 +15,8 @@ spring:
 server:
   port: 10521
 wx:
-  appId: wx53df3e44b7ec396d
-  secret: 93546c0ea60846721a6e6ff86f28b86b
+  appId: #填写你自己的小程序appId
+  secret: #填写你自己的小程序secret
 logging:
   file:
     name: toolApi.log

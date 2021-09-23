@@ -87,14 +87,16 @@ public class VideoServiceImpl implements VideoService {
         //获取链接ID
         String id = matcher.group(1);
         String dyWebApi = "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=" + id;
-        System.out.println(dyWebApi);
         String content = restTemplateUtil.getForObject(dyWebApi, httpHeaders, String.class);
         Asserts.urlInfoNotNull(content, "API请求异常");
         JSONObject videoInfo = JSON.parseObject(content).getJSONArray("item_list").getJSONObject(0);
         VideoInfoDto videoInfoDto = new VideoInfoDto();
+        videoInfoDto.setTime(videoInfo.getString("create_time"));
+        videoInfoDto.setCover(videoInfo.getJSONObject("video").getJSONObject("origin_cover").getJSONArray("url_list").getString(0));
         videoInfoDto.setUrl(videoInfo.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list").getString(0).replace("playwm", "play"));
         videoInfoDto.setTitle(videoInfo.getString("desc"));
         videoInfoDto.setAuthor(videoInfo.getJSONObject("author").getString("nickname"));
+        videoInfoDto.setAvatar(videoInfo.getJSONObject("author").getJSONObject("avatar_larger").getJSONArray("url_list").getString(0));
         return videoInfoDto;
     }
 
@@ -115,19 +117,24 @@ public class VideoServiceImpl implements VideoService {
                         String pageData = matcherForPageData.group(1);
                         JSONObject pageDataOb = JSONObject.parseObject(pageData);
                         videoInfoDto = new VideoInfoDto();
-                        videoInfoDto.setAuthor(pageDataOb.getJSONObject("user").getString("name"));
                         JSONObject mediaJob = pageDataOb.getJSONObject("video");
                         String photoType = mediaJob.getString("type");
-                        videoInfoDto.setTitle(mediaJob.getString("caption"));
                         if ("video".equals(photoType)) {
                             videoInfoDto.setUrl(mediaJob.getString("srcNoMark"));
+                        } else {
+                            Asserts.urlParsingFail("暂时只支持视频解析");
                         }
+                        videoInfoDto.setTitle(mediaJob.getString("caption"));
+                        videoInfoDto.setAuthor(pageDataOb.getJSONObject("user").getString("name"));
+                        videoInfoDto.setAvatar(pageDataOb.getJSONObject("user").getString("avatar"));
+                        videoInfoDto.setCover(mediaJob.getString("shareCover"));
+                        videoInfoDto.setTime(pageDataOb.getJSONObject("rawPhoto").getString("timestamp"));
                     }
                 }
 
             }
         }
-        Asserts.urlInfoNotNull(videoInfoDto, "视频解析异常");
+        Asserts.urlInfoNotNull(videoInfoDto, "解析异常");
         return videoInfoDto;
     }
 
